@@ -67,8 +67,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2021/02/22}
-\def\fmt@version{1.3.26}
+\def\fmt@date{2021/03/05}
+\def\fmt@version{1.3.28}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -77,6 +77,24 @@
 \newif\if@openright
 \newif\if@mainmatter \@mainmattertrue
 \newif\if@nameyear \@nameyearfalse
+
+\RequirePackage{etoolbox}
+
+%% class cfg load
+\long\def\@if@vtex@in@house#1#2{%
+  \@ifundefined{vtex@in@house}
+    {#2}
+    {#1}%
+  }
+\IfFileExists{\fmt@name-vtex.cfg}
+  {%
+    \xdef\vtex@in@house{1}%
+    \input\fmt@name-vtex.cfg
+  }{%
+    \input\fmt@name.cfg
+  }
+
+\csuse{\fmt@name @load@fileinfo}
 
 \DeclareOption{10pt}{\let\eleven@pt\relax}
 \DeclareOption{11pt}{\def\eleven@pt{}}
@@ -167,7 +185,11 @@
   \gdef\@eissn{1876-1372}%
   \gdef\@price{35.00}%
   \gdef\@journal{Journal of Ambient Intelligence and Smart Environments}%
-  \global\@twocolumntrue
+  \ifnum\jobstart@date@info>20210304\relax
+    \global\@twocolumnfalse \global\@restonecoltrue
+  \else
+    \global\@twocolumntrue
+  \fi
   \gdef\ios@journal@layout{0}%
   }
 \DeclareOption{sw}{%
@@ -410,7 +432,11 @@
   \gdef\@price{35.00}%
   \gdef\@journal{AI Communications}
   \gdef\ios@journal@layout{2}%
-  \global\@twocolumntrue \global\@restonecolfalse
+  \ifnum\jobstart@date@info>20210304\relax
+    \global\@twocolumnfalse \global\@restonecoltrue
+  \else
+    \global\@twocolumntrue \global\@restonecolfalse
+  \fi
   }
 \DeclareOption{rda}{%
   \gdef\@jid{rda}
@@ -513,29 +539,12 @@
 
 \ProcessOptions
 
-\RequirePackage{etoolbox}
-
 \expandafter\ifstrequal\expandafter{\@JID}{SAT}{%
   \xdef\iosx@version{112}% \bid and \newtheoremstyle{plain} settings
   }{}%
 
-%% class cfg load
-\long\def\@if@vtex@in@house#1#2{%
-  \@ifundefined{vtex@in@house}
-    {#2}
-    {#1}%
-  }
-\IfFileExists{\fmt@name-vtex.cfg}
-  {%
-    \xdef\vtex@in@house{1}%
-    \input\fmt@name-vtex.cfg
-  }{%
-    \input\fmt@name.cfg
-  }
-
 \csuse{\fmt@name @load@dummy@layout}
 \csuse{\fmt@name @load@class@version@if}
-\csuse{\fmt@name @load@fileinfo}
 \csuse{\fmt@name @load@openaccess@check}
 \csuse{\fmt@name @load@vkt@cmn@md}
 
