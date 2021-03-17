@@ -67,8 +67,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2021/03/05}
-\def\fmt@version{1.3.28}
+\def\fmt@date{2021/03/16}
+\def\fmt@version{1.3.29}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -1172,6 +1172,16 @@
   \gappto\@articletype@prehook{%
     \global\let\ios@pages@trimbox\ios@pages@trimbox@papersize
     }%
+  }
+\def\init@ios@journal@AIC@settings{%
+  \ifnum\jobstart@date@info>20210316\relax
+    \AtEndOfClass{\mathindent=2em}%
+  \fi
+  }
+\def\init@ios@journal@AIS@settings{%
+  \ifnum\jobstart@date@info>20210316\relax
+    \AtEndOfClass{\mathindent=2em}%
+  \fi
   }
 
 %% Fonts
